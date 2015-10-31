@@ -3,15 +3,15 @@
 class BaSeMa_Install{
     public static function execute(){
         $success=false;
-        _::echoWriteInfo("BaSeMa installation started...");
+        _::echoWriteInfo("Bsm installation started...");
         $dbm=new MyMangr_ObjectsModel();
         //Create user table
-        if($dbm->tableExists('SPR_BSM_USER')){
-            _::echoWriteInfo("Dropping SPR_BSM_USER table");
-            $dbm->execute("DROP TABLE SPR_BSM_USER");
+        if($dbm->tableExists('BsmUser')){
+            _::echoWriteInfo("Dropping BsmUser table");
+            $dbm->execute("DROP TABLE BsmUser");
         }
-        _::echoWriteInfo("Creating SPR_BSM_USER table");
-        $sql="CREATE TABLE SPR_BSM_USER
+        _::echoWriteInfo("Creating BsmUser table");
+        $sql="CREATE TABLE BsmUser
               (
                      id_user         VARCHAR    (12)  NOT NULL COMMENT 'User id, like u001, 88124, ...',
                      name            VARCHAR    (60)  NOT NULL COMMENT 'Name of the user',
@@ -26,11 +26,11 @@ class BaSeMa_Install{
                      )
               )";
         $dbm->execute($sql);
-        if($dbm->tableExists('SPR_BSM_USER')==false){
-            _::echoWriteInfo("Unable to create SPR_BSM_USER table. Exiting BaSeMa install.");
+        if($dbm->tableExists('BsmUser')==false){
+            _::echoWriteInfo("Unable to create BsmUser table. Exiting Bsm install.");
             return $success;
         }else{
-            _::echoWriteInfo("Table SPR_BSM_USER succesfullly created");
+            _::echoWriteInfo("Table BsmUser succesfullly created");
         }        
         
         
