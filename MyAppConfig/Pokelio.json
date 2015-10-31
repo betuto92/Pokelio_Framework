@@ -17,12 +17,12 @@
                       "PORT":3306,
                       "USER":"root",
                       "PASSWORD":"root",
-                      "SCHEMA":"Pokelio"},
+                      "SCHEMA":"pokelio"},
                "DB2":{"ENGINE":"Oracle",
                       "DSN":"10.30.0.115:8765/xe",
                       "USER":"Pokelio",
                       "PASSWORD":"Pokeliopass",
-                      "SCHEMA":"Pokelio"}                  
+                      "SCHEMA":"pokelio"}                  
           },
           "ERROR_HANDLING_RULES":{
                 "all":{"I":1, "L":1, "S":1},
@@ -46,5 +46,6 @@
           "PHP_ERROR_REPORTING":false,
           "EXCEPTION_HANDLING_RULE":{"I":1, "L":1},
           "EXCEPTION_SHOW_CODE_LINES":5,
-          "ALLOW_URL_PARAMS":true
+          "ALLOW_URL_PARAMS":true,
+          "CREATED_FILE_PERMISSIONS":"0777"
 }

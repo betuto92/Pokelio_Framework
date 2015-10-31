@@ -19,8 +19,12 @@ class MyModule_MainController{
         */
         
         //$user=new BaSeMa_SPR_BSM_USER_Entity();
+        
+        //$user=new Bsm_BsmUserModel();
+        $auth=new Bsm_Authentication();
+        var_dump($auth->login('aia', 'passtest01'));
+        //$auth->setPassword('aia', 'passtest01');
         /*
-        $user=new Bsm_BsmUserModel();
         $userData=new Bsm_BsmUser_Entity();
         $userData->id_user='aisa';
         $userData->email='kasjdhkjadsh';

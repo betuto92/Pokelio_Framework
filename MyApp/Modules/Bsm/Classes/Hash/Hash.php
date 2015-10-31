@@ -1,6 +1,6 @@
 <?php
 
-class BaSeMa_Hash{
+class Bsm_Hash{
     public static function getUserPasswordHash($user, $password){
         $userPassword=$user.$password;
         return self::generateHash($userPassword);
