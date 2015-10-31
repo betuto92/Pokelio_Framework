@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f [OR]
+RewriteCond %{REQUEST_URI} !\.(js|css|jpe?g|gif|png|bmp|ico|eot|svg|woff|ttf|htm|html)$ [NC]
+RewriteRule . App.php [QSA,L]

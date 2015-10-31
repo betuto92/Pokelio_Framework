@@ -1,0 +1,16 @@
+<?php
+/*
+ * MyApp
+ * 
+ * (c) Alan Brito de Hierro <a.brito (at) mydomain.my>
+ *
+ */
+class MyModule_ExampleModel extends Pokelio_Oracle_Connector{
+    public function __construct() {
+        parent::__construct('DB1');
+    }
+    public function listBooks(){
+        $sql="select * from books";
+        return $this->executeAndFetchAll($sql);
+    }    
+}
