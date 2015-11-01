@@ -34,6 +34,7 @@ class Pokelio_File{
      * @param type $maxlen
      */    
     public static function readFile($filename, $use_include_path=false, $context=null, $offset=-1, $maxlen=null){
-        return file_get_contents($filename, $use_include_path, $context, $offset, $maxlen);
+        $content = file_get_contents($filename, $use_include_path, $context, $offset, $maxlen);
+        return $content;
     }    
 }

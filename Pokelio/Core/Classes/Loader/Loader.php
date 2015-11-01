@@ -71,7 +71,7 @@ class Pokelio_Loader{
                     if(substr($className,-5)=='Model'){
                         $classFilename=$modulePath.'/Model/'.$className.'.php';
                     }elseif(substr($className,-6)=='Entity'){
-                        $classFilename=$modulePath.'/Model/'.substr($className,0,-6).'Model.php';    
+                        $classFilename=$modulePath.'/Model/'.substr($className,0,-6).'Entity.php';    
                     }elseif(substr($className,-10)=='Controller'){
                         $classFilename=$modulePath.'/Controller/'.$className.'.php';
                     }elseif(substr($className,-7)=='Install'){

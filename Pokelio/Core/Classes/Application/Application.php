@@ -120,9 +120,8 @@ class Pokelio_Application{
         if(Pokelio_Global::getConfig('ESTABLISH_SESSION', 'Pokelio')){
             Pokelio_Session::start();
         }   
-        //Invoke the starting point
-        $startingPoint=Pokelio_Global::getConfig('START_POINT', 'Pokelio');
-        call_user_func($startingPoint);
+        //Start APP
+        $this->start();
     }
     /**
      * The app has been initiated from a cli interface (shell, dos), 
@@ -133,9 +132,17 @@ class Pokelio_Application{
         define('SESSION_TYPE','CLI');     
         //Define string to make a new line (CR or <br />)
         define('NL', "\r\n");     
-        //Invoke the starting point
-        $startingPoint=Pokelio_Global::getConfig('START_POINT','Pokelio');
-        call_user_func($startingPoint);        
+        //Start APP
+        $this->start();
+    }
+    /**
+     * Invokes App starting point
+     */
+    private function start(){
+        $startClass=Pokelio_Global::getConfig('START_CLASS','Pokelio');
+        $startMethod=Pokelio_Global::getConfig('START_METHOD','Pokelio');
+        $class=new $startClass();
+        $class->$startMethod();
     }
     /**
      * Defines the set of constants for Pokelio file locations

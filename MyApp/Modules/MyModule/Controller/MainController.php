@@ -1,7 +1,10 @@
 <?php
 
-class MyModule_MainController{
-    public static function hello(){
+class MyModule_MainController extends Pokelio_ControllerSimple{
+    public function __construct() {
+        parent::__construct(__FILE__);
+    }
+    public function hello(){
         //TESTING  
        
         //BaSeMa_Install::execute();
@@ -21,8 +24,8 @@ class MyModule_MainController{
         //$user=new BaSeMa_SPR_BSM_USER_Entity();
         
         //$user=new Bsm_BsmUserModel();
-        $auth=new Bsm_Authentication();
-        var_dump($auth->login('aia', 'passtest01'));
+        //$auth=new Bsm_Authentication();
+        //var_dump($auth->login('aia', 'passtest01'));
         //$auth->setPassword('aia', 'passtest01');
         /*
         $userData=new Bsm_BsmUser_Entity();
@@ -37,11 +40,23 @@ class MyModule_MainController{
         //$res=$user->listRecords($userCond, true);
 
         //var_dump($res);
-        
+        /*
         $MyM=new CodeGen_ModelGen();
-        $modelCode=$MyM->generateModel('Bsm', 'BsmUser');
+        $modelCode=$MyM->generateModel('Bsm', 'BsmProfile');
 
+        $prof=new Bsm_BsmProfileModel();
+        $dat=new Bsm_BsmProfileEntity();
+        $dat->profile="test01";
+        $dat->status="A";
+        $prof->create($dat);
+        */
+        //echo $this->modulePath;
+        //echo "<br />";
+        //echo $this->moduleName;
+        
         //echo "<pre>$modelCode</pre>";
+        $this->nombre="Mi nombre";
+        $this->renderTemplate('Sample');
     }    
     
 }

@@ -36,6 +36,28 @@ class BaSeMa_Install{
         }else{
             _::echoWriteInfo("Table BsmUser succesfullly created");
         }        
+        //Create profile table
+        if($dbm->tableExists('BsmProfile')){
+            _::echoWriteInfo("Dropping BsmProfile table");
+            $dbm->execute("DROP TABLE BsmProfile");
+        }
+        _::echoWriteInfo("Creating BsmProfile table");
+        $sql="CREATE TABLE BsmProfile
+              (
+                     id_profile      INT        (11)  NOT NULL COMMENT 'Profile identificator',
+                     profile         VARCHAR    (60)  NOT NULL COMMENT 'Profile name',
+                     status          CHAR        (1)  NOT NULL COMMENT 'Status: A-Active, D-Deactivated',
+                     PRIMARY KEY(
+                        id_profile
+                     )
+              )";
+        $dbm->execute($sql);
+        if($dbm->tableExists('BsmProfile')==false){
+            _::echoWriteInfo("Unable to create BsmProfile table. Exiting Bsm install.");
+            return $success;
+        }else{
+            _::echoWriteInfo("Table BsmProfile succesfullly created");
+        }        
         
         $success=true;
         return $success;

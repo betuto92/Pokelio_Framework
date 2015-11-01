@@ -26,6 +26,7 @@ class Codegen_ModelGen{
             if($column['COLUMN_KEY']=='PRI'){
                 $priKey[]=array('name'=>$column['COLUMN_NAME'], 
                                 'type'=>self::getPhpType($column['DATA_TYPE']),
+                                'extra'=>$column['EXTRA'],
                                 'desc'=>$column['COLUMN_COMMENT']);
             }
         }
@@ -34,32 +35,36 @@ class Codegen_ModelGen{
         }
         $introCode = self::generateIntro($module, $table);
         $readCode = self::generateReadCode($module, $table, $columns, $maxNameLength, $priKey);
+        $getNextCode = self::generateGetNextCode($module, $table, $columns, $maxNameLength, $priKey);
         $constructCode = self::generateConstructCode($module, $table, $columns, $maxNameLength, $priKey);
         $listCode = self::generateListCode($module, $table, $columns, $maxNameLength, $priKey);
         $createCode = self::generateCreateCode($module, $table, $columns, $maxNameLength, $priKey);
         $updateCode = self::generateUpdateCode($module, $table, $columns, $maxNameLength, $priKey);
         $deleteCode = self::generateDeleteCode($module, $table, $columns, $maxNameLength, $priKey);   
         $functionCode = self::generateFunctionCode($module, $table, $columns, $maxNameLength, $priKey);
-        $entityCode = self::generateEntityClass($module, $table, $columns, $maxNameLength);
         
         $modelCode.=$introCode;
         $modelCode.="class ".$module."_".$table."ModelGen extends Pokelio_MySql_Connector{ \n";
         $modelCode.=$constructCode;
         $modelCode.=$readCode;
         $modelCode.=$listCode;
+        $modelCode.=$getNextCode;        
         $modelCode.=$createCode;
         $modelCode.=$updateCode;
         $modelCode.=$deleteCode;
         $modelCode.=$functionCode;        
         $modelCode.="} \n\n";
-        $modelCode.=$entityCode;
+        //Write ModelGen file
         Pokelio_File::writeFile(APP_MODULES_PATH.'/'.$module.'/Model/'.$table.'ModelGen.php',$modelCode);
+        //Write Model wrapper file
         self::generateWrapper($module, $table);
+        //Write Entity file
+        self::generateEntityClass($module, $table, $columns, $maxNameLength);
     } 
     public static function generateWrapper($module, $table){     
         if(!file_exists(APP_MODULES_PATH.'/'.$module.'/Model/'.$table.'Model.php')){
             $wrapperCode="<?php \n";
-            $wrapperCode.="require_once 'BsmUserModelGen.php';\n";
+            $wrapperCode.="require_once '".$table."ModelGen.php';\n";
             $wrapperCode.="/** \n";
             $wrapperCode.=" *  ".$module."_".$table."Model\n";
             $wrapperCode.=" *  A class for wrapping main model class.\n";
@@ -124,7 +129,7 @@ class Codegen_ModelGen{
             $code.="     * @param ".$column['type']." \$".$column['name']." <i>".$column['desc']."</i>\n";
         }
         $code.="     *  \n";
-        $code.="     * @return ".$module."_".$table."_Entity \n";
+        $code.="     * @return ".$module."_".$table."Entity \n";
         $code.="     *  \n";
         $code.="     */ \n";
         $code.="     public function read(".$priKeyVars."){\n";
@@ -155,17 +160,49 @@ class Codegen_ModelGen{
         $code.="     }\n";
         return $code;
     }    
+    private static function generateGetNextCode($module, $table, $columns, $maxNameLength, $priKey){
+        $code="";
+        //Generate code?
+        $calculated=false;
+        $auto=false;
+        if(sizeof($priKey)==1 && $priKey[0]['type']=='integer'){
+            $calculated=true;
+            if(strpos($priKey[0]['extra'],"auto_increment")!==false){
+                $auto=true;
+            }
+        }
+        if($calculated==true && $auto==false){
+            $code.="    /** \n";
+            $code.="     * Calculates the next record identifier \n";
+            $code.="     *  \n";
+            $code.="     * @return integer \n";
+            $code.="     *  \n";
+            $code.="     */ \n";
+            $code.="     private function getNextId(){\n";
+            $code.='         $sql = "SELECT coalesce(max('.$priKey[0]['name'].'),0) + 1 as Id '."\n";
+            $code.='                 FROM '.$table."\";\n";
+            $code.='         $result = $this->executeAndFetchAll($sql);'."\n";        
+            $code.='         if(sizeof($result)>0){'."\n";        
+            $code.='             $result = $result[0][\'Id\'];'."\n";        
+            $code.='         }else{'."\n";        
+            $code.='             $result = false;'."\n";        
+            $code.='         }'."\n";        
+            $code.='         return $result;'."\n";        
+            $code.="     }\n";
+        }
+        return $code;
+    }    
     private static function generateListCode($module, $table, $columns, $maxNameLength, $priKey){
         $code="";
         $code.="    /** \n";
         $code.="     * Lists records that match fields with value of the entity passed \n";
         $code.="     *  \n";
-        $code.="     * @param ".$module."_".$table."_Entity \$entity <i>Instance of entity with values</i>\n";
+        $code.="     * @param ".$module."_".$table."Entity \$entity <i>Instance of entity with values</i>\n";
         $code.="     * @param boolean \$rowsResult <i>Result is an array of rows, not an array of entities</i>\n";
         $code.="     *  \n";
         $code.="     * @return array \n";     
         $code.="     */ \n";
-        $code.="     public function listRecords(".$module."_".$table."_Entity \$entity, \$rowsResult=false){\n";
+        $code.="     public function listRecords(".$module."_".$table."Entity \$entity, \$rowsResult=false){\n";
         $code.='         $parameters = array();'."\n";         
         $code.='         $sql = "SELECT * '."\n";
         $code.='                 FROM '.$table."\";\n";
@@ -193,29 +230,60 @@ class Codegen_ModelGen{
         return $code;
     }    
     private static function generateCreateCode($module, $table, $columns, $maxNameLength, $priKey){
+        //Decide what to do with primary key
+        $calculated=false;
+        $auto=false;
+        if(sizeof($priKey)==1 && $priKey[0]['type']=='integer'){
+            $calculated=true;
+            if(strpos($priKey[0]['extra'],"auto_increment")!==false){
+                $auto=true;
+            }
+        }
+        //Prepare list of columns and values
         $cols="";
         $vals="";
         foreach($columns as $column){
-            $cols.=$column['COLUMN_NAME'].", ";
-            $vals.="?, ";
+            //If the key is autoincrement type do not include it in SQL
+            if($column['COLUMN_NAME']==$priKey[0]['name']){
+                if($auto!=true){
+                    $cols.=$column['COLUMN_NAME'].", ";
+                    $vals.="?, ";
+                }
+            }else{
+                $cols.=$column['COLUMN_NAME'].", ";
+                $vals.="?, ";
+            }    
         }
         $cols=substr($cols,0,-2);
-        $vals=substr($vals,0,-2);
-
+        $vals=substr($vals,0,-2);        
+        //Write the code
         $code="";
         $code.="    /** \n";
         $code.="     * Creates a new record with values of the entity passed \n";
         $code.="     *  \n";
-        $code.="     * @param ".$module."_".$table."_Entity \$entity <i>Instance of entity with values</i>\n";
+        $code.="     * @param ".$module."_".$table."Entity \$entity <i>Instance of entity with values</i><br />\n";
+        if($calculated==true){
+            if($auto==true){
+                $code.="     * The primary key ".$priKey[0]['name']." (autoincrement) is calculated automatically by DB Engine\n";
+            }else{
+                $code.="     * The primary key ".$priKey[0]['name']." is calculated automatically by getNextId() method.\n";
+            }
+        }
         $code.="     *  \n";
         $code.="     */ \n";
-        $code.="     public function create(".$module."_".$table."_Entity \$entity){\n";
+        $code.="     public function create(".$module."_".$table."Entity \$entity){\n";
         $code.='         $parameters = array();'."\n";         
         $code.='         $sql = "INSERT INTO '.$table."\";\n";
         $code.='         $sql.= " ('.$cols.')";'."\n";
         $code.='         $sql.= " VALUES ('.$vals.')";'."\n";
         foreach($columns as $column){
-            $code.='         $parameters[]= $entity->'.$column['COLUMN_NAME'].';'."\n";
+            if($column['COLUMN_NAME']==$priKey[0]['name'] && $calculated==true){
+                if($auto==false){
+                    $code.='         $parameters[]= self::getNextId();'."\n";
+                }    
+            }else{
+                $code.='         $parameters[]= $entity->'.$column['COLUMN_NAME'].';'."\n";
+            }
         }   
         $code.='         $result = $this->execute($sql, $parameters);'."\n";               
         $code.='         return $result;'."\n";        
@@ -227,10 +295,10 @@ class Codegen_ModelGen{
         $code.="    /** \n";
         $code.="     * Updates the record identified by values of the entity passed \n";
         $code.="     *  \n";
-        $code.="     * @param ".$module."_".$table."_Entity \$entity <i>Instance of entity with values</i>\n";
+        $code.="     * @param ".$module."_".$table."Entity \$entity <i>Instance of entity with values</i>\n";
         $code.="     *  \n";
         $code.="     */ \n";
-        $code.="     public function update(".$module."_".$table."_Entity \$entity){\n";
+        $code.="     public function update(".$module."_".$table."Entity \$entity){\n";
         $code.='         $parameters = array();'."\n";         
         $code.='         $sql = "UPDATE '.$table." SET \";\n";
         $codeWhere="";
@@ -305,15 +373,15 @@ class Codegen_ModelGen{
     private static function generateFunctionCode($module, $table, $columns, $maxNameLength, $priKey){
         $code="";
         $code.="    /** \n";
-        $code.="     * Converts a PDO array into a ".$module."_".$table."_Entity instance \n";
+        $code.="     * Converts a PDO array into a ".$module."_".$table."Entity instance \n";
         $code.="     *  \n";
         $code.="     * @param array \$array <i>PDO array</i>\n";
         $code.="     *  \n";
-        $code.="     * @return ".$module."_".$table."_Entity \n";
+        $code.="     * @return ".$module."_".$table."Entity \n";
         $code.="     *  \n";
         $code.="     */ \n";
         $code.="     public function arrayToEntity(\$array){\n";
-        $code.='         $instance = new '.$module.'_'.$table.'_Entity();'."\n";
+        $code.='         $instance = new '.$module.'_'.$table.'Entity();'."\n";
         $code.='         foreach($array as $key=>$value){ '."\n";
         $code.='             $instance->$key = $value;'."\n";
         $code.='         }'."\n";
@@ -322,20 +390,29 @@ class Codegen_ModelGen{
         return $code;
     }    
     private static function generateEntityClass($module, $table, $columns, $maxNameLength){
-        $entity="";
-        $entity.="class ".$module."_".$table."_Entity { \n";
+        $entityCode="";
+        $entityCode="<?php \n";
+        $entityCode.="/** \n";
+        $entityCode.=" *  ".$module."_".$table."Entity\n";
+        $entityCode.=" *  A class containing mappings of $table table.\n";
+        $entityCode.=" *  \n";
+        $entityCode.=" *  Code generated by Pokelio Codegen Module on ".date('r')."\n";
+        $entityCode.=" *  \n";
+        $entityCode.=" */ \n";           
+        $entityCode.="class ".$module."_".$table."Entity { \n";
         foreach($columns as $column){
-            $entity.="    /** \n";
+            $entityCode.="    /** \n";
             $phpType=self::getPhpType($column['DATA_TYPE']);
-            $entity.="     * @var ".str_pad($phpType,8)." ".$column['COLUMN_COMMENT']."<br />"."\n";
-            $entity.="     * <b>Column Type:</b> ".$column['COLUMN_TYPE']."<br />"."\n";
-            $entity.="     * <b>Nullable:</b> ".$column['IS_NULLABLE']."<br />"."\n";
-            $entity.="     * <b>Column Key:</b> ".$column['COLUMN_KEY']."<br />"."\n";
-            $entity.="     */ \n";
-            $entity.="    public \$".$column['COLUMN_NAME']."; \n";
+            $entityCode.="     * @var ".str_pad($phpType,8)." ".$column['COLUMN_COMMENT']."<br />"."\n";
+            $entityCode.="     * <b>Column Type:</b> ".$column['COLUMN_TYPE']."<br />"."\n";
+            $entityCode.="     * <b>Nullable:</b> ".$column['IS_NULLABLE']."<br />"."\n";
+            $entityCode.="     * <b>Column Key:</b> ".$column['COLUMN_KEY']."<br />"."\n";
+            $entityCode.="     * <b>Extra info:</b> ".$column['EXTRA']."<br />"."\n";
+            $entityCode.="     */ \n";
+            $entityCode.="    public \$".$column['COLUMN_NAME']."; \n";
         }
-        $entity.="} \n";  
-        return $entity;
+        $entityCode.="} \n";  
+        Pokelio_File::writeFile(APP_MODULES_PATH.'/'.$module.'/Model/'.$table.'Entity.php',$entityCode);
     }
     private static function getPhpType($mysqlType){
         $types=array();

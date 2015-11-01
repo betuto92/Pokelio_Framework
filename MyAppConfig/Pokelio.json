@@ -1,10 +1,11 @@
 {
           "APP_NAME": "MyApp",
           "xxSTART_POINT": "Pokelio_Application::dummyStartingPoint",
-          "START_POINT": "MyModule_MainController::hello",
+          "START_CLASS": "MyModule_MainController",
+          "START_METHOD": "hello",
           "ALLOW_INSTALLATIONS":true,
-          "LOG_FILEx": "/var/www/html/PokelioFramework/MyAppTmpLog/log.txt",
-          "LOG_FILE": "c:\\xampp\\htdocs\\PokelioFramework\\MyAppTmpLog\\log.txt",
+          "LOG_FILE": "/var/www/html/PokelioFramework/MyAppTmpLog/log.txt",
+          "LOG_FILEx": "c:\\xampp\\htdocs\\PokelioFramework\\MyAppTmpLog\\log.txt",
           "LOG_LEVEL": 0,
           "LOG_TO_SCREEN": true,
           "LOG_INFO": true,
@@ -47,5 +48,7 @@
           "EXCEPTION_HANDLING_RULE":{"I":1, "L":1},
           "EXCEPTION_SHOW_CODE_LINES":5,
           "ALLOW_URL_PARAMS":true,
-          "CREATED_FILE_PERMISSIONS":"0777"
+          "CREATED_FILE_PERMISSIONS":"0777",
+          "APP_VIEW_PATH":"/var/www/html/Pokelio_Framework/MyAppView",
+          "USE_USYNTAX":true
 }
