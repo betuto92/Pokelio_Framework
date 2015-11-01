@@ -50,5 +50,6 @@
           "ALLOW_URL_PARAMS":true,
           "CREATED_FILE_PERMISSIONS":"0777",
           "APP_VIEW_PATH":"/var/www/html/Pokelio_Framework/MyAppView",
-          "USE_USYNTAX":true
+          "USE_USYNTAX":true,
+          "USYNTAX_CACHE":false
 }

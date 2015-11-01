@@ -1,11 +1,16 @@
 <?php
-
+/**
+ * Pokelio_uSyntax (microSyntax)
+ * 
+ * A class to parse templates and replace {{ }} entries with PHP code
+ */
 class Pokelio_uSyntax{
     public static function view($view, $templateName){
+        $cache = _::getConfig('USYNTAX_CACHE');
         $viewFile=$view;
         $procViewFile=_::getConfig('APP_VIEW_PATH').'/'.$templateName.'Template.php';
         if(file_exists($procViewFile)){
-            if(filemtime($viewFile)>filemtime($procViewFile)){
+            if(filemtime($viewFile)>filemtime($procViewFile) || $cache==false){
                 self::processView($viewFile, $procViewFile);
             }
         }else{
@@ -16,12 +21,14 @@ class Pokelio_uSyntax{
     private static function processView($viewFile,$procViewFile){
         $viewContent= file_get_contents($viewFile);
         //$pattern = "/{{(.*)}}/"; Error, no procesa varios en una linea
-        $pattern = "/{{(.*?)}}/";
+        //$pattern = "/{{(.*?)}}/";
+        $pattern = "@<m>(.*?)</m>@";
         
         preg_match_all($pattern, $viewContent, $matches);
         foreach($matches[1] as $match){
             $target=self::parse($match);
-            $viewContent=str_replace("{{".$match."}}",$target,$viewContent);
+            //$viewContent=str_replace("{{".$match."}}",$target,$viewContent);
+            $viewContent=str_replace("<m>".$match."</m>",$target,$viewContent);
         }
         //Save the processed view with replaced MicroSyntax elements
         Pokelio_File::writeFile($procViewFile, $viewContent);      
