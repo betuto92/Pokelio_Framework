@@ -10,7 +10,8 @@ class Pokelio_ControllerBase{
     }
     
     private function extractParts(){
-        $parts=explode("/",$this->child);
+        $path=str_replace('\\','/',$this->child);
+        $parts=explode("/",$path);
         $trailPart=strlen($parts[sizeof($parts)-1])
                   +strlen($parts[sizeof($parts)-2])
                   +strlen($parts[sizeof($parts)-3])+3;

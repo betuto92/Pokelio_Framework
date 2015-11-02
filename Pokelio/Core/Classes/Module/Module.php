@@ -96,6 +96,14 @@ class Pokelio_Module{
         //Load configuration of the module and callBack to notify
         $configFile=APP_CONFIG_PATH.'/'.$module.'.json';
         Pokelio_Global::loadConfigFile($configFile, $module);
+        //Does the module contain a class loader?
+        $loaderClassFile=$modulePath.'/'.$module.'/Classes/Loader/Loader.php';
+        if(file_exists($loaderClassFile)){
+            require $loaderClassFile;
+            if(is_callable($module.'_Loader::setLoader')){
+                call_user_func($module.'_Loader::setLoader');
+            }
+        }
         //CallBack
         if($callback==true){
             Pokelio_Callback::invokeCallback($module, 'Module', 'moduleRegistered');        

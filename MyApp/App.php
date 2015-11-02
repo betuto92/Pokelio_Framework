@@ -34,7 +34,7 @@ require '../Pokelio/Core/Classes/Application/Application.php';
  * 
  *     
  */
-$configPath=realpath('../MyAppConfig');
+$configPath=realpath('../CLTV/Config');
 $appRealPath=realpath(__DIR__);
 
 $app = new Pokelio_Application($configPath, $appRealPath);
