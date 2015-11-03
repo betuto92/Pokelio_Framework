@@ -1,0 +1,9 @@
+2015-11-03 22:25:56 (00002): 2 chmod(): Operation not permitted /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/File/File.php 26
+2015-11-03 22:30:02 (02048): 2048 Only variables should be passed by reference /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/File/File.php 43
+2015-11-03 22:30:02 (01024): 1024 Extension json not found. /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/RscServer/RscServer.php 13
+2015-11-03 22:31:04 (02048): 2048 Only variables should be passed by reference /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/File/File.php 43
+2015-11-03 22:31:04 (01024): 1024 Extension php not found. /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/RscServer/RscServer.php 13
+2015-11-03 22:32:03 (02048): 2048 Only variables should be passed by reference /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/File/File.php 43
+2015-11-03 22:32:03 (01024): 1024 Extension json not found. /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/RscServer/RscServer.php 13
+2015-11-03 22:33:33 (02048): 2048 Only variables should be passed by reference /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/File/File.php 43
+2015-11-03 22:34:31 (02048): 2048 Only variables should be passed by reference /var/www/html/Pokelio_Framework/Pokelio/Core/Classes/File/File.php 43

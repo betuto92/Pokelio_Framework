@@ -129,7 +129,7 @@ class Pokelio_Application{
     }
     /**
      * The app has been initiated from a cli interface (shell, dos), 
-     * so let's set up everything for this environment
+     * so let's set up everything for this environment.
      */    
     private function cliManager(){
         //Define a global value to identify cli type session

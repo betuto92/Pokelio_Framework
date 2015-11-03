@@ -37,4 +37,11 @@ class Pokelio_File{
         $content = file_get_contents($filename, $use_include_path, $context, $offset, $maxlen);
         return $content;
     }    
+    public static function getFileExtension($filename){
+        $ext=false;
+        if(strpos($filename,".")!==false){
+            $ext = strtolower(end(explode('.', $filename)));
+        }
+        return $ext;
+    }
 }

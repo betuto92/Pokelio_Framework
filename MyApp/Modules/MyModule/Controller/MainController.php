@@ -57,6 +57,7 @@ class MyModule_MainController extends Pokelio_ControllerSimple{
         //echo "<pre>$modelCode</pre>";
         $this->nombre="Mi nombre";
         $this->renderTemplate('Sample');
+        Pokelio_RscServer::serveFile('/var/www/html/Pokelio_Framework/CLTV/Config/Pokelio.json');
     }    
     
 }
