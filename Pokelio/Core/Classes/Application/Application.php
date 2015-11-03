@@ -114,6 +114,10 @@ class Pokelio_Application{
     private function webManager(){
         //Define a global value to identify web type session
         define('SESSION_TYPE','WEB');
+        //Define URL Paths
+        $self=$_SERVER['PHP_SELF'];
+        $appUrlPath=substr($self,0,-strpos(strrev($self),"/")-1);
+        define("APP_URL_PATH",$appUrlPath);
         //Define string to make a new line (CR or <br />)
         define('NL', "<br />");     
         //Open a new session if specified
@@ -132,6 +136,8 @@ class Pokelio_Application{
         define('SESSION_TYPE','CLI');     
         //Define string to make a new line (CR or <br />)
         define('NL', "\r\n");     
+        //Define url paths
+        define("APP_URL_PATH", null);
         //Start APP
         $this->start();
     }
