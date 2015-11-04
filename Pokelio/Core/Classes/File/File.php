@@ -44,4 +44,49 @@ class Pokelio_File{
         }
         return $ext;
     }
+    public static function makedir($dir){
+        $permissions=  Pokelio_Global::getConfig('CREATED_FILE_PERMISSIONS', 'Pokelio');
+        $permissions=intval($permissions,8);
+        
+        if(!file_exists($dir)){
+            mkdir($dir);
+        }        
+    }
+    public static function copyDir($srcDir, $trgDir, $cleanFirst=false){
+        $permissions=  Pokelio_Global::getConfig('CREATED_FILE_PERMISSIONS', 'Pokelio');
+        $permissions=intval($permissions,8);
+        if($cleanFirst==true && file_exists($trgDir)){
+            self::rmDir($trgDir);
+        }
+        Pokelio_File::makedir($trgDir);
+        
+        $entries = scandir($srcDir);
+        foreach($entries as $entry){
+            if(substr($entry,0,1)!='.'){
+                $pathEntry=$srcDir.'/'.$entry;
+                if(is_file($pathEntry)){
+                    copy($pathEntry, $trgDir.'/'.$entry);
+                }
+                if(is_dir($pathEntry)){
+                    Pokelio_File::copyDir($pathEntry, $trgDir.'/'.$entry);
+                }
+                chmod($trgDir.'/'.$entry, $permissions);
+            }
+        }
+    }
+    public static function rmDir($dir){
+        $entries = scandir($dir);
+        foreach($entries as $entry){
+            if(substr($entry,0,1)!='.'){
+                $pathEntry=$dir.'/'.$entry;
+                if(is_file($pathEntry)){
+                    unlink($pathEntry);
+                }
+                if(is_dir($pathEntry)){
+                    Pokelio_File::rmDir($pathEntry);
+                    rmdir($pathEntry);
+                }
+            }
+        }
+    }
 }

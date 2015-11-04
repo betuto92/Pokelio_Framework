@@ -48,6 +48,8 @@
           "ALLOW_URL_PARAMS":true,
           "CREATED_FILE_PERMISSIONS":"0777",
           "APP_VIEW_PATH":"../CLTV/ViewTmp",
+          "WEB_RSC_PATH":"../../webrsc",
+          "WEB_RSC_URL":"/webrsc",
           "USE_USYNTAX":true,
           "USYNTAX_CACHE":false
 }

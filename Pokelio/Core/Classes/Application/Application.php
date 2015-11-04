@@ -118,6 +118,7 @@ class Pokelio_Application{
         $self=$_SERVER['PHP_SELF'];
         $appUrlPath=substr($self,0,-strpos(strrev($self),"/")-1);
         define("APP_URL_PATH",$appUrlPath);
+        
         //Define string to make a new line (CR or <br />)
         define('NL', "<br />");     
         //Open a new session if specified

@@ -53,6 +53,8 @@ class Pokelio_uSyntax{
                     break;
                 case 'HOM(':
                     $res=self::parseHome($token);
+                case 'RSC(':
+                    $res=self::parseRsc($token);                    
                     break;                
                 default:
                     $res=self::parseDisplay($token);
@@ -108,5 +110,9 @@ class Pokelio_uSyntax{
     private static function parseEnd($token){
         $res="<?php } ?>";
         return $res;
-    }    
+    } 
+    private static function parseRsc($token){
+        $res="<?php echo _::getVar('rscUrl'); ?>";
+        return $res;
+    }     
 }

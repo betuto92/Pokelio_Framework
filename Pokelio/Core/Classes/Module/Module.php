@@ -20,11 +20,9 @@ class Pokelio_Module{
      */
     public static function registerModules($modulesPath, $callback=false){
         //Get the list of modules at specified path
-        $modules = scandir($modulesPath);
+        $modules = self::listPathModules($modulesPath);
         foreach($modules as $module){
-            if(substr($module,0,1)!=='.'){
-               self::registerModule($modulesPath, $module, $callback);
-            }
+            self::registerModule($modulesPath, $module, $callback);
         }
     }  
     /**
@@ -110,5 +108,26 @@ class Pokelio_Module{
         }
     }
     
+    public static function listPathModules($path){
+        //Get the list of directory modules
+        $modules=array();
+        $items = scandir($path);
+        foreach($items as $module){
+            if(substr($module,0,1)!=='.'){
+               $modules[]=$module;
+            }
+        }
+        return $modules;
+    }
+    public static function listAppModules(){
+        //Get the list of Application modules
+        $modules=self::listPathModules(APP_MODULES_PATH);
+        return $modules;
+    }
+    public static function listPokelioModules(){
+        //Get the list of Pokelio modules
+        $modules=self::listPathModules(POKELIO_MODULES_PATH);
+        return $modules;
+    }
 }
 
