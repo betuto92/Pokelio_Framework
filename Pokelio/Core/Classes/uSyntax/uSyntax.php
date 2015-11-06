@@ -5,10 +5,12 @@
  * A class to parse templates and replace {{ }} entries with PHP code
  */
 class Pokelio_uSyntax{
-    public static function view($view, $templateName){
+    public static function view($templateSrc, $templateName, $moduleName){
+        $viewPath=_::getConfig("APP_VIEW_PATH");
         $cache = _::getConfig('USYNTAX_CACHE');
-        $viewFile=$view;
-        $procViewFile=_::getConfig('APP_VIEW_PATH').'/'.$templateName.'Template.php';
+        $viewFile=$templateSrc;
+        Pokelio_File::makedir($viewPath.'/'.$moduleName);
+        $procViewFile=$viewPath.'/'.$moduleName.'/'.$templateName.'Template.php';
         if(file_exists($procViewFile)){
             if(filemtime($viewFile)>filemtime($procViewFile) || $cache==false){
                 self::processView($viewFile, $procViewFile);
@@ -35,29 +37,20 @@ class Pokelio_uSyntax{
     }
     private static function parse($token){
         if(substr($token,0,1)!="*"){
-            switch(substr($token,0,4)){
-                case 'DSP(':
-                    $res=self::parseDisplay($token);
-                    break;
-                case 'FOR(':
-                    $res=self::parseFor($token);
-                    break;
-                case 'LOC(':
-                    $res=self::parseLoc($token);
-                    break;
-                case 'END(':
-                    $res=self::parseEnd($token);
-                    break;
-                case 'PHP(':
-                    $res=self::parsePHP($token);
-                    break;
-                case 'HOM(':
-                    $res=self::parseHome($token);
-                case 'RSC(':
-                    $res=self::parseRsc($token);                    
-                    break;                
-                default:
-                    $res=self::parseDisplay($token);
+            if(substr($token, 0, 5) == 'echo('){
+                $res=self::parseDisplay($token);
+            }elseif(substr($token, 0, 4) == 'for('){
+                $res=self::parseFor($token);
+            }elseif(substr($token, 0, 5) == 'bend('){
+                $res=self::parseEnd($token);
+            }elseif(substr($token, 0, 1) == '}'){
+                $res=self::parseEnd($token);                
+            }elseif(substr($token, 0, 4) == 'php('){
+                $res=self::parsePHP($token);
+            }elseif(substr($token, 0, 7) == 'webrsc('){
+                $res=self::parseRsc($token);  
+            }else{
+                $res=self::parseDisplay($token);
             }
         }else{
             $res="";
@@ -85,11 +78,6 @@ class Pokelio_uSyntax{
         $res="<?php ".$ctoken." ?>";
         return $res;
     }
-    private static function parseLoc($token){
-        $ctoken=self::cleanToken($token);
-        $res="<?php echo cccLang::gI()->_str('".$ctoken."') ?>";
-        return $res;
-    }
     private static function parseFor($token){
         $ctoken=self::cleanToken($token);
         $subtokens=explode(",",$ctoken);
@@ -103,16 +91,12 @@ class Pokelio_uSyntax{
         }
         return $res;
     }    
-    private static function parseHome($token){
-        $res="<?php echo str_replace('/index.php','',\$_SERVER['PHP_SELF']); ?>";
-        return $res;
-    }
     private static function parseEnd($token){
         $res="<?php } ?>";
         return $res;
     } 
     private static function parseRsc($token){
-        $res="<?php echo _::getVar('rscUrl'); ?>";
+        $res="<?php echo \$rscUrl; ?>";
         return $res;
     }     
 }

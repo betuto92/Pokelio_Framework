@@ -51,5 +51,7 @@
           "WEB_RSC_PATH":"../../webrsc",
           "WEB_RSC_URL":"/webrsc",
           "USE_USYNTAX":true,
-          "USYNTAX_CACHE":false
+          "USYNTAX_CACHE":false,
+          "DEFAULT_HEADER_TEMPLATE_NAME":"Header",
+          "DEFAULT_FOOTER_TEMPLATE_NAME":"Footer"
 }

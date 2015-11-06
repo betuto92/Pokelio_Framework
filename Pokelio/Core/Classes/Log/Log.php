@@ -21,7 +21,7 @@ class Pokelio_Log{
     public static function write($msg, $level){
         $level=substr("00000".$level,-5);
         $msg=date('Y-m-d H:i:s')." ($level): ".$msg."\n";
-        file_put_contents(Pokelio_Global::getConfig('LOG_FILE'), $msg,FILE_APPEND);
+        file_put_contents(realpath(APP_ROOT_PATH.'/'.Pokelio_Global::getConfig('LOG_FILE')), $msg,FILE_APPEND);
     }
     /**
      * Writes a new line in log file with specified message

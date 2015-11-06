@@ -175,7 +175,9 @@ class Pokelio_Application{
         //Classes
         define('APP_CLASSES_PATH',APP_ROOT_PATH.'/Classes');
         //Modules
-        define('APP_MODULES_PATH',APP_ROOT_PATH.'/Modules');       
+        define('APP_MODULES_PATH',APP_ROOT_PATH.'/Modules');     
+        //Templates (header, footer, ... not the module ones)
+        define('APP_TEMPLATE_PATH',APP_ROOT_PATH.'/Template');     
         //CallBack
         Pokelio_Callback::invokeCallback('Pokelio', 'Application', 'endAppPaths');
     }   

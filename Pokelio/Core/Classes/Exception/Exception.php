@@ -35,6 +35,7 @@ class Pokelio_Exception{
         if($exceptionRule->I==true){
             $text = self::getExceptionPage($exception);
             if(SESSION_TYPE=='WEB'){
+                ob_clean();
                 echo "<pre>".htmlentities($text)."</pre>";
             }else{
                 echo $text;

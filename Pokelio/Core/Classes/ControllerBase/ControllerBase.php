@@ -27,7 +27,6 @@ class Pokelio_ControllerBase{
             $this->isPokelioModule==false;
             $this->rscUrl=_::getConfig("WEB_RSC_URL").'/App/'.$this->moduleName;
         }               
-        _::setVar('rscUrl', $this->rscUrl);
     }
 }
 

@@ -53,6 +53,7 @@ class Pokelio_Error{
         if($errorRules->$errno->I && $errorRules->all->I){
             $text = self::getErrorPage($errno, $errstr, $errfile, $errline, $errcontext);
             if(SESSION_TYPE=='WEB'){
+                ob_clean();
                 echo "<pre>".htmlentities($text)."</pre>";
             }else{
                 echo $text;
@@ -98,6 +99,7 @@ class Pokelio_Error{
            if($errorRules->{1}->I && $errorRules->all->I){
                 $text = self::getFatalErrorPage($errno, $errstr, $errfile, $errline);
                 if(SESSION_TYPE=='WEB'){
+                    ob_clean();
                     echo "<pre>".htmlentities($text)."</pre>";
                 }else{
                     echo $text;
