@@ -34,4 +34,11 @@ class Pokelio_WebResources{
         self::deployAllAppModuleResources();
         self::deployAllPokelioModuleResources();
     }
+    public static function deployVendors(){
+        $webRscPath=  realpath(_::getConfig("WEB_RSC_PATH"));
+        if(file_exists(POKELIO_ROOT_PATH.'/Vendors')){
+            Pokelio_File::makedir($webRscPath.'/Vendors');
+            Pokelio_File::copyDir(POKELIO_ROOT_PATH.'/Vendors', $webRscPath.'/Vendors');
+        }        
+    }
 }

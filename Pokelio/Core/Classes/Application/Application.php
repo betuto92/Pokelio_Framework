@@ -100,14 +100,6 @@ class Pokelio_Application{
         die($msg.NL);
     }
     /**
-     * The default starting point once the startup has finished
-     * This value can be changed in the section START_POINT of config file
-     */
-    public static function dummyStartingPoint(){
-        echo (NL.'Everything went OK.'.NL.'Now, change the START_POINT of config file and start using Pokelio PHP Framework'.NL);
-        exit;
-    }
-    /**
      * The app has been initiated from a web interface, so let's set up 
      * everything for this environment
      */
@@ -148,8 +140,13 @@ class Pokelio_Application{
     private function start(){
         $startClass=Pokelio_Global::getConfig('START_CLASS','Pokelio');
         $startMethod=Pokelio_Global::getConfig('START_METHOD','Pokelio');
-        $class=new $startClass();
-        $class->$startMethod();
+        if($startClass=="" || $startMethod==""){
+            echo (NL.'Everything went OK.'.NL.NL.'Now, change the START_CLASS and START_METHOD of config file and start using Pokelio PHP Framework'.NL);
+            exit;
+        }else{
+            $class=new $startClass();
+            $class->$startMethod();
+        }    
     }
     /**
      * Defines the set of constants for Pokelio file locations

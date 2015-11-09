@@ -53,5 +53,9 @@
           "USE_USYNTAX":true,
           "USYNTAX_CACHE":false,
           "DEFAULT_HEADER_TEMPLATE_NAME":"Header",
-          "DEFAULT_FOOTER_TEMPLATE_NAME":"Footer"
+          "DEFAULT_FOOTER_TEMPLATE_NAME":"Footer",
+          "HTML":{
+              "lang":"es",
+              "charset":"utf8"
+          }
 }

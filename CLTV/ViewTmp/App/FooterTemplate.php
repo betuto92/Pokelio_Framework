@@ -1,4 +1,8 @@
-<div>
-    This is the footer
-</div>
+        <script>
+            $(document).ready(
+                 //Code here        
 
+            );
+        </script>
+    </body>
+</html>

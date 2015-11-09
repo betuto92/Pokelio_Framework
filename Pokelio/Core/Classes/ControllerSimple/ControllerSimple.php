@@ -2,13 +2,15 @@
 
 class Pokelio_ControllerSimple extends Pokelio_ControllerBase{
     private $varStore=null;
+    /**
+     *
+     * @var Pokelio_View $view
+     */
+    public $view=null;
     public function __construct($child) {
         parent::__construct($child);
         $this->varStore=array();
-        $this->varStore['rscUrl']=$this->rscUrl;
-    }
-    public function __set($name, $value){
-        $this->varStore[$name]=$value;
+        $this->view=new Pokelio_View();
     }
     protected function renderTemplate($templateName, $header=null, $footer=null){
         //Get, if necessary, the default header and/or footer 
@@ -19,7 +21,7 @@ class Pokelio_ControllerSimple extends Pokelio_ControllerBase{
             $footer = _::getConfig('DEFAULT_FOOTER_TEMPLATE_NAME');
         }
         //Import variables from varStore
-        extract($this->varStore);
+        extract($this->view->getVars());
         //Initialize ouput buffer
         ob_start();
         //Require header file if specified
@@ -51,3 +53,4 @@ class Pokelio_ControllerSimple extends Pokelio_ControllerBase{
         echo $output;
     }
 }
+
