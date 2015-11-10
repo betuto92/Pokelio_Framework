@@ -1,7 +1,6 @@
 <?php
 
 class Pokelio_ControllerSimple extends Pokelio_ControllerBase{
-    private $varStore=null;
     /**
      *
      * @var Pokelio_View $view
@@ -9,7 +8,6 @@ class Pokelio_ControllerSimple extends Pokelio_ControllerBase{
     public $view=null;
     public function __construct($child) {
         parent::__construct($child);
-        $this->varStore=array();
         $this->view=new Pokelio_View();
     }
     protected function renderTemplate($templateName, $header=null, $footer=null){
@@ -32,6 +30,12 @@ class Pokelio_ControllerSimple extends Pokelio_ControllerBase{
             }
             require $view;
         }    
+        //Require JSEnabler if JSVar array contains variables
+        $jsVars=$this->view->getJSVars();
+        if(sizeof($jsVars)>0){
+            $JSEnabler = APP_TEMPLATE_PATH.'/JSEnablerTemplate.php';
+            require $JSEnabler;
+        }
         //Require template file
         $template=_::getConfig('APP_VIEW_PATH').'/'.$templateName.'Template.php';
         $templateSrc=$this->modulePath.'/'.$this->moduleName.'/Template/'.$templateName.'Template.php';
@@ -39,6 +43,7 @@ class Pokelio_ControllerSimple extends Pokelio_ControllerBase{
             $view = Pokelio_uSyntax::view($templateSrc,$templateName, $this->moduleName);
         }
         require $view;
+
         //Require footer file if specified
         if($footer!=""){
             $templateSrc=APP_TEMPLATE_PATH.'/'.$footer.'Template.php';

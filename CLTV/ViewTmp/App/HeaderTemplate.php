@@ -7,6 +7,9 @@
         <!-- jQuery http://jquery.com/ -->
         <script src="<?php echo $rscUrl; ?>/Vendors/jQuery/jquery-2.1.4.min.js"></script>
         
+        <!-- Pokelio -->
+        <script src="<?php echo $rscUrl; ?>/Vendors/Pokelio/js/pokelio.js"></script>
+        
         <!-- easyui http://www.jeasyui.com/ -->
         <!--
         <link rel="stylesheet" href="<?php echo $rscUrl; ?>/Vendors/easyui/themes/default/easyui.css">

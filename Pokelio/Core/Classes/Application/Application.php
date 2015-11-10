@@ -8,7 +8,7 @@
 
 /**
  * Pokelio_Application 
- * The main class of Pokelio Framework
+ * The main Application instantiator of Pokelio Framework
  * 
  * @author A. Iriberri <betuto92 (at) gmail.com>
  */

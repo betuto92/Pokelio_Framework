@@ -56,16 +56,19 @@ class MyModule_MainController extends Pokelio_ControllerSimple{
         
         //echo "<pre>$modelCode</pre>";
         $this->view->setPageTitle("This is the title of MyApp");
-        $this->view->nombre="My nameñ";
-        //$this->view->includeJs('Vendors/jQuery/jquery-2.1.4.min.js');
+        //$this->view->nombre="My name";
+        //$this->view->setJSVar('nombre', "My name");
+        $this->view->includeJs('Vendors/jQuery/jquery-2.1.4.min.js');
+        $this->view->copyVarsToJSVars();
+        
         $this->renderTemplate('Sample');
         //Pokelio_RscServer::serveFile('/var/www/html/Pokelio_Framework/CLTV/Config/Pokelio.json');
         //Pokelio_File::copyDir('/var/www/html/Pokelio_Framework', '/var/www/html/webrsc', true);
         //Pokelio_File::rmDir('/var/www/html/webrsc');
         //echo "kkk";
-        Pokelio_WebResources::deployAllModuleResources();
-        Pokelio_WebResources::deployVendors();
-        echo _::getParamValue('prueba');
+        //Pokelio_WebResources::deployAllModuleResources();
+        //Pokelio_WebResources::deployVendors();
+        //echo _::getParamValue('prueba');
     }    
     
 }
