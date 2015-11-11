@@ -33,7 +33,8 @@
         
         <!-- Materialize http://materializecss.com// -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+        <link rel="stylesheet" href="<m>$rscUrl</m>/Vendors/Google/Fonts/Material+Icons/Material+Icons.css">
         <link rel="stylesheet" href="<m>$rscUrl</m>/Vendors/Materialize/css/materialize.min.css">
         <script src="<m>$rscUrl</m>/Vendors/Materialize/js/materialize.min.js"></script>
                 

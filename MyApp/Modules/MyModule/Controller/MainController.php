@@ -58,7 +58,9 @@ class MyModule_MainController extends Pokelio_ControllerSimple{
         $this->view->setPageTitle("This is the title of MyApp");
         //$this->view->nombre="My name";
         //$this->view->setJSVar('nombre', "My name");
-        $this->view->includeJs('Vendors/jQuery/jquery-2.1.4.min.js');
+        //$this->view->includeJs('Vendors/jQuery/jquery-2.1.4.min.js');
+        $this->view->includeCss('Vendors/Google/Fonts/YanoneKaffeesatz/YanoneKaffeesatz.css');
+        $this->view->includeCss('Vendors/Google/Fonts/SourceCodePro/SourceCodePro.css');
         $this->view->copyVarsToJSVars();
         
         $this->renderTemplate('Sample');
@@ -67,7 +69,7 @@ class MyModule_MainController extends Pokelio_ControllerSimple{
         //Pokelio_File::rmDir('/var/www/html/webrsc');
         //echo "kkk";
         //Pokelio_WebResources::deployAllModuleResources();
-        //Pokelio_WebResources::deployVendors();
+        Pokelio_WebResources::deployVendors();
         //echo _::getParamValue('prueba');
     }    
     

@@ -84,6 +84,11 @@
 
 <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>button</a>
 
+<div style="font-family: 'Source Code Pro';font-weight: 400;">
+    This is not a moñospaced text 54.768,54<br />
+    012345678901234567890123456789<br />
+    áéíóúÁ
+</div>
 <script>
     //alert(htmlJs[0]);
 </script>
