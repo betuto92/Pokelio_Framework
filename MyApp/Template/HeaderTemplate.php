@@ -49,6 +49,38 @@
         <script src="<m>$jsFile</m>"></script>
         <m>}</m>
     </head>
-
-    <body id="body" class="home">
+    <script>
+        $(document).ready(function(){
+            //Enable menu button for mobile
+            $(".button-collapse").sideNav();
+        });
+    </script>    
+    <body>
+        <header>
+            <nav>
+                <div class="nav-wrapper light-green">
+                    <a href="#" class="brand-logo">Logo</a>
+                    <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+                    <ul id="dropdown1" class="dropdown-content">
+                        <li><a href="#!">one</a></li>
+                        <li><a href="#!">two</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#!">three</a></li>
+                    </ul>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                      <li class="active"><a href="sass.html">Home</a></li>
+                      <li><a class="dropdown-button" href="#!" data-activates="dropdown1">Documentation<i class="material-icons right">arrow_drop_down</i></a></li>
+                      <li><a href="collapsible.html">Downloads</a></li>
+                      <li><a href="collapsible.html">Contact</a></li>
+                    </ul>
+                    <ul class="side-nav" id="mobile-demo">
+                        <li><a href="sass.html">Home</a></li>
+                        <li><a href="badges.html">Documentation</a></li>
+                        <li><a href="collapsible.html">Downloads</a></li>
+                        <li><a href="mobile.html">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>  
+        </header>
+        <main>
         
